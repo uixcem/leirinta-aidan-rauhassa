@@ -1,24 +1,37 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Hero } from "@/components/site/Hero";
+import { AvailabilityQuickCheck } from "@/components/site/AvailabilityQuickCheck";
+import { SellingPoints } from "@/components/site/SellingPoints";
+import { PitchTeaser } from "@/components/site/PitchTeaser";
+import { AreaHighlights } from "@/components/site/AreaHighlights";
+import { ReviewsStrip } from "@/components/site/ReviewsStrip";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+type QuickCheckSearch = {
+  checkIn?: string;
+  checkOut?: string;
+  adults?: number;
+  children?: number;
+};
+
 export const Route = createFileRoute("/")({
+  validateSearch: (s: Record<string, unknown>): QuickCheckSearch => ({
+    checkIn: typeof s.checkIn === "string" ? s.checkIn : undefined,
+    checkOut: typeof s.checkOut === "string" ? s.checkOut : undefined,
+    adults: typeof s.adults === "number" ? s.adults : undefined,
+    children: typeof s.children === "number" ? s.children : undefined,
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <Hero />
+      <AvailabilityQuickCheck />
+      <SellingPoints />
+      <PitchTeaser />
+      <AreaHighlights />
+      <ReviewsStrip />
+    </>
   );
 }
