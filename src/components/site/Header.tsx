@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
+import { AppButton } from "@/components/ui/AppButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
 
@@ -57,9 +57,9 @@ export function Header() {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher />
-          <Button asChild variant="primary" size="md">
+          <AppButton asChild variant="primary" size="md">
             <Link to="/varaa">{t("nav.book")}</Link>
-          </Button>
+          </AppButton>
         </div>
 
         <button
@@ -95,11 +95,11 @@ export function Header() {
           </ul>
           <div className="mt-4 flex items-center justify-between">
             <LanguageSwitcher />
-            <Button asChild variant="primary" size="md">
+            <AppButton asChild variant="primary" size="md">
               <Link to="/varaa" onClick={() => setOpen(false)}>
                 {t("nav.book")}
               </Link>
-            </Button>
+            </AppButton>
           </div>
         </Container>
       </div>

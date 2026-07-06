@@ -3,7 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/ui/Container";
 import { Field } from "@/components/ui/Field";
-import { Button } from "@/components/ui/Button";
+import { AppButton } from "@/components/ui/AppButton";
 
 function isoTomorrow(offset = 1) {
   const d = new Date();
@@ -72,9 +72,9 @@ export function AvailabilityQuickCheck() {
             value={children}
             onChange={(e) => setChildren(Number(e.target.value))}
           />
-          <Button type="submit" size="lg" className="w-full lg:w-auto">
+          <AppButton type="submit" size="lg" className="w-full lg:w-auto">
             {t("quick.submit")}
-          </Button>
+          </AppButton>
         </div>
         <p className="mt-4 text-[13px] text-stone">{t("quick.note")}</p>
       </form>

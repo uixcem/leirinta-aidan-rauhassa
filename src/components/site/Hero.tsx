@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/ui/Container";
-import { Button } from "@/components/ui/Button";
+import { AppButton } from "@/components/ui/AppButton";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import heroImg from "@/assets/hero-lake.jpg";
 
@@ -31,16 +31,16 @@ export function Hero() {
           {t("hero.sub")}
         </p>
         <div className="mt-8 flex flex-wrap gap-3">
-          <Button asChild variant="accent" size="lg">
+          <AppButton asChild variant="accent" size="lg">
             <a href="#quick-check">{t("hero.cta.primary")}</a>
-          </Button>
-          <Button
+          </AppButton>
+          <AppButton
             asChild
             size="lg"
             className="border border-birch/40 bg-transparent text-birch hover:bg-birch/10"
           >
             <Link to="/majoitus">{t("hero.cta.secondary")}</Link>
-          </Button>
+          </AppButton>
         </div>
       </Container>
     </section>
