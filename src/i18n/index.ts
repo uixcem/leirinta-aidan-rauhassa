@@ -5,14 +5,18 @@ import commonFi from "./fi/common.json";
 import commonEn from "./en/common.json";
 import homeFi from "./fi/home.json";
 import homeEn from "./en/home.json";
+import bookingFi from "./fi/booking.json";
+import bookingEn from "./en/booking.json";
+import adminFi from "./fi/admin.json";
+import adminEn from "./en/admin.json";
 
 export const SUPPORTED_LANGS = ["fi", "en"] as const;
 export type Lang = (typeof SUPPORTED_LANGS)[number];
 export const DEFAULT_LANG: Lang = "fi";
 
 const resources = {
-  fi: { common: commonFi, home: homeFi },
-  en: { common: commonEn, home: homeEn },
+  fi: { common: commonFi, home: homeFi, booking: bookingFi, admin: adminFi },
+  en: { common: commonEn, home: homeEn, booking: bookingEn, admin: adminEn },
 } as const;
 
 function detectInitialLang(): Lang {
