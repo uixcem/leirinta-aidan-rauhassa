@@ -62,7 +62,7 @@ export const createBooking = createServerFn({ method: "POST" })
     // Re-check availability atomically
     const { data: avail, error: aErr } = await supabaseAdmin.rpc(
       "check_pitch_availability",
-      { _check_in: data.checkIn, _check_out: data.checkOut, _pitch_type: null },
+      { _check_in: data.checkIn, _check_out: data.checkOut, _pitch_type: undefined },
     );
     if (aErr) throw new Error(aErr.message);
     const pitch = (avail ?? []).find((p) => p.pitch_id === data.pitchId);
