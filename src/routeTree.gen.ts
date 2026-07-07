@@ -9,38 +9,111 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VaraaRouteImport } from './routes/varaa'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VaraaKiitosRouteImport } from './routes/varaa.kiitos'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const VaraaRoute = VaraaRouteImport.update({
+  id: '/varaa',
+  path: '/varaa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VaraaKiitosRoute = VaraaKiitosRouteImport.update({
+  id: '/kiitos',
+  path: '/kiitos',
+  getParentRoute: () => VaraaRoute,
+} as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/varaa': typeof VaraaRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRoute
+  '/varaa/kiitos': typeof VaraaKiitosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/varaa': typeof VaraaRouteWithChildren
+  '/admin': typeof AuthenticatedAdminRoute
+  '/varaa/kiitos': typeof VaraaKiitosRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/varaa': typeof VaraaRouteWithChildren
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/varaa/kiitos': typeof VaraaKiitosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/auth' | '/varaa' | '/admin' | '/varaa/kiitos'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/auth' | '/varaa' | '/admin' | '/varaa/kiitos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/varaa'
+    | '/_authenticated/admin'
+    | '/varaa/kiitos'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  VaraaRoute: typeof VaraaRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/varaa': {
+      id: '/varaa'
+      path: '/varaa'
+      fullPath: '/varaa'
+      preLoaderRoute: typeof VaraaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +121,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/varaa/kiitos': {
+      id: '/varaa/kiitos'
+      path: '/kiitos'
+      fullPath: '/varaa/kiitos'
+      preLoaderRoute: typeof VaraaKiitosRouteImport
+      parentRoute: typeof VaraaRoute
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
+interface VaraaRouteChildren {
+  VaraaKiitosRoute: typeof VaraaKiitosRoute
+}
+
+const VaraaRouteChildren: VaraaRouteChildren = {
+  VaraaKiitosRoute: VaraaKiitosRoute,
+}
+
+const VaraaRouteWithChildren = VaraaRoute._addFileChildren(VaraaRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
+  VaraaRoute: VaraaRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

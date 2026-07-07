@@ -231,9 +231,9 @@ function BookingForm({
   const total = Number(pitch.price_per_night) * nights;
 
   const createFn = useServerFn(createBooking);
+  type CreateInput = Parameters<typeof createBooking>[0] extends { data: infer D } ? D : never;
   const mutation = useMutation({
-    mutationFn: (data: Parameters<typeof createFn>[0]["data"]) =>
-      createFn({ data }),
+    mutationFn: (data: CreateInput) => createFn({ data }),
     onSuccess: (_res) => onSuccess(_res.bookingReference, email.toLowerCase()),
   });
 
