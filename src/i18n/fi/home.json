@@ -7,6 +7,11 @@
   "hero.imgAlt": "Ilmakuva Järvenrannan leirintäalueesta aamu-usvassa, järvi ja havumetsä",
 
   "quick.title": "Tarkista saatavuus",
+  "quick.stayType.legend": "Majoitustyyppi",
+  "quick.stayType.tent": "Teltta",
+  "quick.stayType.motorhome": "Matkailuauto",
+  "quick.stayType.caravan": "Matkailuvaunu",
+  "quick.stayType.cabin": "Mökki",
   "quick.checkIn": "Saapuminen",
   "quick.checkOut": "Lähtö",
   "quick.adults": "Aikuiset",
