@@ -6,12 +6,16 @@ import { PitchTeaser } from "@/components/site/PitchTeaser";
 import { AreaHighlights } from "@/components/site/AreaHighlights";
 import { ReviewsStrip } from "@/components/site/ReviewsStrip";
 
+type StayType = "tent" | "motorhome" | "caravan" | "cabin";
 type QuickCheckSearch = {
   checkIn?: string;
   checkOut?: string;
   adults?: number;
   children?: number;
+  stayType?: StayType;
 };
+
+const STAY_TYPES: readonly StayType[] = ["tent", "motorhome", "caravan", "cabin"];
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): QuickCheckSearch => ({
@@ -19,6 +23,10 @@ export const Route = createFileRoute("/")({
     checkOut: typeof s.checkOut === "string" ? s.checkOut : undefined,
     adults: typeof s.adults === "number" ? s.adults : undefined,
     children: typeof s.children === "number" ? s.children : undefined,
+    stayType:
+      typeof s.stayType === "string" && (STAY_TYPES as readonly string[]).includes(s.stayType)
+        ? (s.stayType as StayType)
+        : undefined,
   }),
   component: Index,
 });

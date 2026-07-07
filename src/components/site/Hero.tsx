@@ -1,12 +1,22 @@
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/ui/Container";
 import { AppButton } from "@/components/ui/AppButton";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { canLoadHeavyMedia } from "@/lib/connection";
 import heroImg from "@/assets/hero-lake.jpg";
+import heroVideo from "@/assets/hero-camp.mp4.asset.json";
 
 export function Hero() {
   const { t } = useTranslation("home");
+  const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (canLoadHeavyMedia()) setShowVideo(true);
+  }, []);
+
   return (
     <section className="relative isolate overflow-hidden bg-forest text-birch">
       <img
@@ -18,6 +28,20 @@ export function Hero() {
         decoding="async"
         className="absolute inset-0 h-full w-full object-cover opacity-70"
       />
+      {showVideo && (
+        <video
+          ref={videoRef}
+          src={heroVideo.url}
+          poster={heroImg}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+        />
+      )}
       <div
         aria-hidden
         className="absolute inset-0 bg-gradient-to-b from-forest/40 via-forest/20 to-forest/80"

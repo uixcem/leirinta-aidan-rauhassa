@@ -7,6 +7,11 @@
   "hero.imgAlt": "Aerial view of Järvenranta campsite in morning mist over a lake and coniferous forest",
 
   "quick.title": "Check availability",
+  "quick.stayType.legend": "Stay type",
+  "quick.stayType.tent": "Tent",
+  "quick.stayType.motorhome": "Motorhome",
+  "quick.stayType.caravan": "Caravan",
+  "quick.stayType.cabin": "Cabin",
   "quick.checkIn": "Check-in",
   "quick.checkOut": "Check-out",
   "quick.adults": "Adults",
