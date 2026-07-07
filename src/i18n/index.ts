@@ -35,7 +35,7 @@ if (!i18n.isInitialized) {
     lng: detectInitialLang(),
     fallbackLng: DEFAULT_LANG,
     defaultNS: "common",
-    ns: ["common", "home"],
+    ns: ["common", "home", "booking", "admin"],
     interpolation: { escapeValue: false },
     react: { useSuspense: false },
   });
