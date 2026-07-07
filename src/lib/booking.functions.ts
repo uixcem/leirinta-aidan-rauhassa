@@ -27,7 +27,7 @@ export const searchAvailability = createServerFn({ method: "POST" })
     const { data: rows, error } = await supabase.rpc("check_pitch_availability", {
       _check_in: data.checkIn,
       _check_out: data.checkOut,
-      _pitch_type: data.stayType ?? null,
+      _pitch_type: data.stayType,
     });
     if (error) throw new Error(error.message);
     return rows ?? [];
