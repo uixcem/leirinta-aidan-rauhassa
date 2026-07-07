@@ -14,16 +14,211 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          adults: number
+          booking_reference: string
+          check_in: string
+          check_out: string
+          children: number
+          created_at: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          id: string
+          nights: number
+          pitch_id: string
+          special_requests: string | null
+          status: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+          updated_at: string
+          vehicle_plate: string | null
+        }
+        Insert: {
+          adults?: number
+          booking_reference: string
+          check_in: string
+          check_out: string
+          children?: number
+          created_at?: string
+          guest_email: string
+          guest_name: string
+          guest_phone: string
+          id?: string
+          nights: number
+          pitch_id: string
+          special_requests?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price: number
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Update: {
+          adults?: number
+          booking_reference?: string
+          check_in?: string
+          check_out?: string
+          children?: number
+          created_at?: string
+          guest_email?: string
+          guest_name?: string
+          guest_phone?: string
+          id?: string
+          nights?: number
+          pitch_id?: string
+          special_requests?: string | null
+          status?: Database["public"]["Enums"]["booking_status"]
+          total_price?: number
+          updated_at?: string
+          vehicle_plate?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_pitch_id_fkey"
+            columns: ["pitch_id"]
+            isOneToOne: false
+            referencedRelation: "pitches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pitch_closures: {
+        Row: {
+          created_at: string
+          ends_on: string
+          id: string
+          pitch_id: string
+          reason: string | null
+          starts_on: string
+        }
+        Insert: {
+          created_at?: string
+          ends_on: string
+          id?: string
+          pitch_id: string
+          reason?: string | null
+          starts_on: string
+        }
+        Update: {
+          created_at?: string
+          ends_on?: string
+          id?: string
+          pitch_id?: string
+          reason?: string | null
+          starts_on?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pitch_closures_pitch_id_fkey"
+            columns: ["pitch_id"]
+            isOneToOne: false
+            referencedRelation: "pitches"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pitches: {
+        Row: {
+          capacity: number
+          created_at: string
+          description: string | null
+          has_electricity: boolean
+          id: string
+          is_active: boolean
+          name: string
+          pitch_type: Database["public"]["Enums"]["pitch_type"]
+          price_per_night: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          capacity?: number
+          created_at?: string
+          description?: string | null
+          has_electricity?: boolean
+          id?: string
+          is_active?: boolean
+          name: string
+          pitch_type: Database["public"]["Enums"]["pitch_type"]
+          price_per_night: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          capacity?: number
+          created_at?: string
+          description?: string | null
+          has_electricity?: boolean
+          id?: string
+          is_active?: boolean
+          name?: string
+          pitch_type?: Database["public"]["Enums"]["pitch_type"]
+          price_per_night?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_pitch_availability: {
+        Args: {
+          _check_in: string
+          _check_out: string
+          _pitch_type?: Database["public"]["Enums"]["pitch_type"]
+        }
+        Returns: {
+          capacity: number
+          description: string
+          has_electricity: boolean
+          name: string
+          pitch_id: string
+          pitch_type: Database["public"]["Enums"]["pitch_type"]
+          price_per_night: number
+        }[]
+      }
+      generate_booking_reference: { Args: never; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "staff"
+      booking_status:
+        | "pending"
+        | "confirmed"
+        | "checked_in"
+        | "completed"
+        | "cancelled"
+      pitch_type: "tent" | "motorhome" | "caravan" | "cabin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +345,16 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "staff"],
+      booking_status: [
+        "pending",
+        "confirmed",
+        "checked_in",
+        "completed",
+        "cancelled",
+      ],
+      pitch_type: ["tent", "motorhome", "caravan", "cabin"],
+    },
   },
 } as const
