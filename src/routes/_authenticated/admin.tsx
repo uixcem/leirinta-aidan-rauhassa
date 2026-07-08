@@ -20,14 +20,14 @@ export const Route = createFileRoute("/_authenticated/admin")({
   notFoundComponent: () => <Container className="py-16">Ei löytynyt</Container>,
 });
 
-const TABS = [
+const TABS: ReadonlyArray<{ to: string; label: string; exact?: boolean }> = [
   { to: "/admin", label: "nav.dashboard", exact: true },
   { to: "/admin/varaukset", label: "nav.bookings" },
   { to: "/admin/kalenteri", label: "nav.calendar" },
   { to: "/admin/paikat", label: "nav.pitches" },
   { to: "/admin/sulkemiset", label: "nav.closures" },
   { to: "/admin/asetukset", label: "nav.settings" },
-] as const;
+];
 
 function AdminLayout() {
   const { t } = useTranslation("admin");
