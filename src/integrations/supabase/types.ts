@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
+          admin_notes: string | null
           adults: number
           booking_reference: string
           check_in: string
@@ -35,6 +36,7 @@ export type Database = {
           vehicle_plate: string | null
         }
         Insert: {
+          admin_notes?: string | null
           adults?: number
           booking_reference: string
           check_in: string
@@ -54,6 +56,7 @@ export type Database = {
           vehicle_plate?: string | null
         }
         Update: {
+          admin_notes?: string | null
           adults?: number
           booking_reference?: string
           check_in?: string
@@ -81,6 +84,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      company_settings: {
+        Row: {
+          address_line: string
+          bic: string
+          business_id: string
+          city: string
+          company_name: string
+          country: string
+          created_at: string
+          email: string
+          iban: string
+          id: string
+          invoice_prefix: string
+          payment_terms_days: number
+          phone: string
+          postal_code: string
+          updated_at: string
+          vat_rate: number
+          website: string
+        }
+        Insert: {
+          address_line?: string
+          bic?: string
+          business_id?: string
+          city?: string
+          company_name?: string
+          country?: string
+          created_at?: string
+          email?: string
+          iban?: string
+          id?: string
+          invoice_prefix?: string
+          payment_terms_days?: number
+          phone?: string
+          postal_code?: string
+          updated_at?: string
+          vat_rate?: number
+          website?: string
+        }
+        Update: {
+          address_line?: string
+          bic?: string
+          business_id?: string
+          city?: string
+          company_name?: string
+          country?: string
+          created_at?: string
+          email?: string
+          iban?: string
+          id?: string
+          invoice_prefix?: string
+          payment_terms_days?: number
+          phone?: string
+          postal_code?: string
+          updated_at?: string
+          vat_rate?: number
+          website?: string
+        }
+        Relationships: []
       }
       pitch_closures: {
         Row: {
