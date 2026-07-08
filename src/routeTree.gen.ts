@@ -15,6 +15,12 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as VaraaKiitosRouteImport } from './routes/varaa.kiitos'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
+import { Route as AuthenticatedAdminVarauksetRouteImport } from './routes/_authenticated/admin.varaukset'
+import { Route as AuthenticatedAdminSulkemisetRouteImport } from './routes/_authenticated/admin.sulkemiset'
+import { Route as AuthenticatedAdminPaikatRouteImport } from './routes/_authenticated/admin.paikat'
+import { Route as AuthenticatedAdminKalenteriRouteImport } from './routes/_authenticated/admin.kalenteri'
+import { Route as AuthenticatedAdminAsetuksetRouteImport } from './routes/_authenticated/admin.asetukset'
 
 const VaraaRoute = VaraaRouteImport.update({
   id: '/varaa',
@@ -45,20 +51,66 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRoute,
+} as any)
+const AuthenticatedAdminVarauksetRoute =
+  AuthenticatedAdminVarauksetRouteImport.update({
+    id: '/varaukset',
+    path: '/varaukset',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSulkemisetRoute =
+  AuthenticatedAdminSulkemisetRouteImport.update({
+    id: '/sulkemiset',
+    path: '/sulkemiset',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminPaikatRoute =
+  AuthenticatedAdminPaikatRouteImport.update({
+    id: '/paikat',
+    path: '/paikat',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminKalenteriRoute =
+  AuthenticatedAdminKalenteriRouteImport.update({
+    id: '/kalenteri',
+    path: '/kalenteri',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAsetuksetRoute =
+  AuthenticatedAdminAsetuksetRouteImport.update({
+    id: '/asetukset',
+    path: '/asetukset',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/varaa': typeof VaraaRouteWithChildren
-  '/admin': typeof AuthenticatedAdminRoute
+  '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/varaa/kiitos': typeof VaraaKiitosRoute
+  '/admin/asetukset': typeof AuthenticatedAdminAsetuksetRoute
+  '/admin/kalenteri': typeof AuthenticatedAdminKalenteriRoute
+  '/admin/paikat': typeof AuthenticatedAdminPaikatRoute
+  '/admin/sulkemiset': typeof AuthenticatedAdminSulkemisetRoute
+  '/admin/varaukset': typeof AuthenticatedAdminVarauksetRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/varaa': typeof VaraaRouteWithChildren
-  '/admin': typeof AuthenticatedAdminRoute
   '/varaa/kiitos': typeof VaraaKiitosRoute
+  '/admin/asetukset': typeof AuthenticatedAdminAsetuksetRoute
+  '/admin/kalenteri': typeof AuthenticatedAdminKalenteriRoute
+  '/admin/paikat': typeof AuthenticatedAdminPaikatRoute
+  '/admin/sulkemiset': typeof AuthenticatedAdminSulkemisetRoute
+  '/admin/varaukset': typeof AuthenticatedAdminVarauksetRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -66,14 +118,41 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/varaa': typeof VaraaRouteWithChildren
-  '/_authenticated/admin': typeof AuthenticatedAdminRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/varaa/kiitos': typeof VaraaKiitosRoute
+  '/_authenticated/admin/asetukset': typeof AuthenticatedAdminAsetuksetRoute
+  '/_authenticated/admin/kalenteri': typeof AuthenticatedAdminKalenteriRoute
+  '/_authenticated/admin/paikat': typeof AuthenticatedAdminPaikatRoute
+  '/_authenticated/admin/sulkemiset': typeof AuthenticatedAdminSulkemisetRoute
+  '/_authenticated/admin/varaukset': typeof AuthenticatedAdminVarauksetRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/varaa' | '/admin' | '/varaa/kiitos'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/varaa'
+    | '/admin'
+    | '/varaa/kiitos'
+    | '/admin/asetukset'
+    | '/admin/kalenteri'
+    | '/admin/paikat'
+    | '/admin/sulkemiset'
+    | '/admin/varaukset'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/varaa' | '/admin' | '/varaa/kiitos'
+  to:
+    | '/'
+    | '/auth'
+    | '/varaa'
+    | '/varaa/kiitos'
+    | '/admin/asetukset'
+    | '/admin/kalenteri'
+    | '/admin/paikat'
+    | '/admin/sulkemiset'
+    | '/admin/varaukset'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -82,6 +161,12 @@ export interface FileRouteTypes {
     | '/varaa'
     | '/_authenticated/admin'
     | '/varaa/kiitos'
+    | '/_authenticated/admin/asetukset'
+    | '/_authenticated/admin/kalenteri'
+    | '/_authenticated/admin/paikat'
+    | '/_authenticated/admin/sulkemiset'
+    | '/_authenticated/admin/varaukset'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -135,15 +220,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/varaukset': {
+      id: '/_authenticated/admin/varaukset'
+      path: '/varaukset'
+      fullPath: '/admin/varaukset'
+      preLoaderRoute: typeof AuthenticatedAdminVarauksetRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/sulkemiset': {
+      id: '/_authenticated/admin/sulkemiset'
+      path: '/sulkemiset'
+      fullPath: '/admin/sulkemiset'
+      preLoaderRoute: typeof AuthenticatedAdminSulkemisetRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/paikat': {
+      id: '/_authenticated/admin/paikat'
+      path: '/paikat'
+      fullPath: '/admin/paikat'
+      preLoaderRoute: typeof AuthenticatedAdminPaikatRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/kalenteri': {
+      id: '/_authenticated/admin/kalenteri'
+      path: '/kalenteri'
+      fullPath: '/admin/kalenteri'
+      preLoaderRoute: typeof AuthenticatedAdminKalenteriRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/asetukset': {
+      id: '/_authenticated/admin/asetukset'
+      path: '/asetukset'
+      fullPath: '/admin/asetukset'
+      preLoaderRoute: typeof AuthenticatedAdminAsetuksetRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteChildren {
+  AuthenticatedAdminAsetuksetRoute: typeof AuthenticatedAdminAsetuksetRoute
+  AuthenticatedAdminKalenteriRoute: typeof AuthenticatedAdminKalenteriRoute
+  AuthenticatedAdminPaikatRoute: typeof AuthenticatedAdminPaikatRoute
+  AuthenticatedAdminSulkemisetRoute: typeof AuthenticatedAdminSulkemisetRoute
+  AuthenticatedAdminVarauksetRoute: typeof AuthenticatedAdminVarauksetRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
+  AuthenticatedAdminAsetuksetRoute: AuthenticatedAdminAsetuksetRoute,
+  AuthenticatedAdminKalenteriRoute: AuthenticatedAdminKalenteriRoute,
+  AuthenticatedAdminPaikatRoute: AuthenticatedAdminPaikatRoute,
+  AuthenticatedAdminSulkemisetRoute: AuthenticatedAdminSulkemisetRoute,
+  AuthenticatedAdminVarauksetRoute: AuthenticatedAdminVarauksetRoute,
+  AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+}
+
+const AuthenticatedAdminRouteWithChildren =
+  AuthenticatedAdminRoute._addFileChildren(AuthenticatedAdminRouteChildren)
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+  AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
 }
 
 const AuthenticatedRouteRouteWithChildren =
@@ -168,3 +316,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
