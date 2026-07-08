@@ -63,8 +63,7 @@ export const updateBookingNotes = createServerFn({ method: "POST" })
     await assertAdmin(context);
     const { error } = await context.supabase
       .from("bookings")
-      // @ts-expect-error admin_notes not yet in generated types
-      .update({ admin_notes: data.admin_notes })
+      .update({ admin_notes: data.admin_notes } as never)
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
