@@ -6,6 +6,8 @@ import { Container } from "@/components/ui/Container";
 import { AppButton } from "@/components/ui/AppButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
+import { pickLang, useLang, useSiteContent } from "@/hooks/useSiteContent";
+
 
 const NAV = [
   { to: "/", key: "nav.home" },
@@ -17,7 +19,11 @@ const NAV = [
 
 export function Header() {
   const { t } = useTranslation("common");
+  const lang = useLang();
+  const { site } = useSiteContent();
+  const brandName = pickLang((site.brand as { name?: { fi?: string; en?: string } } | undefined)?.name, lang, "Järvenranta");
   const [open, setOpen] = useState(false);
+
 
   useEffect(() => {
     if (!open) return;
@@ -34,7 +40,8 @@ export function Header() {
           className="font-display text-lg font-semibold tracking-tight text-forest"
           aria-label={t("brand")}
         >
-          Järvenranta
+          {brandName}
+
         </Link>
 
         <nav aria-label={t("nav.menu")} className="hidden md:block">
