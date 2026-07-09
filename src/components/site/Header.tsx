@@ -40,7 +40,8 @@ export function Header() {
           className="font-display text-lg font-semibold tracking-tight text-forest"
           aria-label={t("brand")}
         >
-          Järvenranta
+          {brandName}
+
         </Link>
 
         <nav aria-label={t("nav.menu")} className="hidden md:block">
