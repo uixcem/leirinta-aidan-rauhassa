@@ -6,6 +6,8 @@ import { Container } from "@/components/ui/Container";
 import { AppButton } from "@/components/ui/AppButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { cn } from "@/lib/utils";
+import { pickLang, useLang, useSiteContent } from "@/hooks/useSiteContent";
+
 
 const NAV = [
   { to: "/", key: "nav.home" },
