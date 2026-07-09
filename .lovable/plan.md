@@ -1,66 +1,58 @@
-# Faz 3 — Varaus järjestelmä + Admin
+# Sisällönhallinta (CMS) admin-paneeliin
 
-## Kapsam
-"Hae" butonu → gerçek saatavuus kontrolü → paikka seçimi → misafir bilgileri → varaus onayı (paikan päällä maksu). Campsite sahibi için admin panel.
+Tavoite: sivuston omistaja (60–70 v.) voi muokata sivustolla näkyvät tekstit, kuvat ja hero-videon ilman koodia. Suuret napit, selkeät suomenkieliset otsikot, esikatselu, "Tallenna" -painike joka kertoo mitä tallennettiin.
 
-## Kullanıcı akışı (misafir)
+## Uudet admin-sivut
 
-```text
-Etusivu  ──Hae──▶  /varaa (tulokset)
-                    │
-                    ├─ Uygun paikat listesi (tip + hinta + kapasite)
-                    ├─ Boş ise: alternatif tarih önerisi
-                    └─ Valitse ──▶ /varaa/vahvistus
-                                    ├─ Nimi, email, puhelin, rekisterinumero (auto)
-                                    ├─ Erikoistoiveet (vapaa teksti)
-                                    └─ Vahvista ──▶ /varaa/kiitos (varausnumero + email)
-```
+1. **Etusivu / Hero** (`/admin/sisalto/etusivu`)
+   - Otsikko, alaotsikko, "eyebrow"-teksti
+   - Hero-kuva (lataa uusi kuva → menee CDN:ään)
+   - Hero-video (lataa uusi mp4, valinnainen; tyhjä = ei videota)
+   - CTA-painikkeiden tekstit
+   - Myyntipisteet (3 kpl): otsikko + kuvaus, järjestettävissä
 
-## Admin akışı
+2. **Majoitukset** (`/admin/sisalto/majoitukset`)
+   - Lista kaikista näkyvistä majoituskorteista (teltta / matkailuauto / mökki)
+   - Kortti = kuva, otsikko, kuvaus, hinta-teksti, järjestysnumero, näkyvyys päälle/pois
+   - Lisää uusi kortti / poista / muokkaa
+   - Kuva ladataan samasta paikasta, näytetään pikkukuva
 
-```text
-/admin/kirjaudu  ──▶  /admin (dashboard)
-                        ├─ Tänään saapuvat / lähtevät
-                        ├─ Varaukset (lista + haku + tila)
-                        ├─ Paikat (CRUD: nimi, tyyppi, kapasiteetti, hinta, sesonki)
-                        └─ Sulkemiset (huoltopäivät / lomat)
-```
+3. **Alue & aktiviteetit** (`/admin/sisalto/alue`)
+   - Lista alue-korteista (Rokua, melonta, kalastus, marjastus…)
+   - Otsikko + kuvaus + järjestys
+   - Lisää / poista / muokkaa
 
-## Veritabanı (Lovable Cloud)
+4. **Arvostelut** (`/admin/sisalto/arvostelut`)
+   - Kolme arvostelua etusivulla: teksti, nimi, päiväys, näkyvyys
+   - Lisää / poista
 
-- `pitches` — id, tyyppi (tent/motorhome/caravan/cabin), nimi, kapasiteetti, hinta_per_yo, sähkö, aktiivinen
-- `bookings` — id, varausnumero, pitch_id, check_in, check_out, aikuiset, lapset, nimi, email, puhelin, rekisterinumero, erikoistoiveet, tila (pending/confirmed/checked_in/completed/cancelled), kokonaishinta
-- `pitch_closures` — pitch_id, alkaa, päättyy, syy (huolto, oma käyttö)
-- `user_roles` — auth.users linkli, `app_role` enum (admin, staff) — güvenli role kontrolü için
+5. **Yleiset tekstit** (`/admin/sisalto/yleiset`)
+   - Brändinimi headerissa
+   - Footer: osoite, puhelin, sähköposti, aukioloajat
+   - (Nämä täydentävät jo olemassa olevaa `company_settings`-taulua)
 
-Saatavuus mantığı: bir paikka boş jos `NOT EXISTS` çakışan aktif varaus veya sulkeminen (check-out günü serbest — o gün başka biri check-in yapabilir).
+## Miten se toimii käyttäjän silmin
 
-## Yetkilendirme
+- Admin-valikkoon uusi kohta: **"Sisältö sivustolla"** isolla ikonilla.
+- Joka sivulla yläreunassa selitys: *"Täältä muokkaat mitä vieraat näkevät etusivulla."*
+- Jokainen kenttä on iso, esimerkkitekstin kera. Kuvat ladataan yhdellä painikkeella.
+- **Tallenna**-painike alalaidassa, vihreä vahvistus: *"Tallennettu. Muutokset näkyvät sivustolla heti."*
+- Yksi peruutuspainike per lomake.
 
-- Misafir varausu → **kirjautumatta** yapılabilir (leirintäalue standardi; email + puhelin yeterli). Anonim RLS insert, yalnızca `bookings` tablosuna sıkı doğrulama ile.
-- Admin → email/parola + Google sign-in. `user_roles` içinde `admin` rolü olan görür.
+## Tekniset yksityiskohdat
 
-## Sayfalar
+- **Uusi taulu `site_content`**: `key TEXT PRIMARY KEY`, `value JSONB`, `updated_at`. Yksi rivi per lohko (hero, footer, jne.). JSONB pitää sisällään monikieliset tekstit `{fi: "...", en: "..."}`.
+- **Uusi taulu `content_cards`**: majoitus/alue/arvostelu -korteille. Sarakkeet: `id`, `section` (enum: `pitch|area|review`), `sort_order`, `is_visible`, `image_url`, `data JSONB` (otsikko/kuvaus/hinta monikielisenä).
+- **Kuvien lataus**: uusi Supabase Storage -bucket `site-media` (public read). Admin lataa selaimesta, URL tallennetaan tietokantaan. Hero-video sama bucket, max 30 MB.
+- **Julkiset komponentit** (`Hero`, `PitchTeaser`, `AreaHighlights`, `ReviewsStrip`, `Footer`) lukevat sisällön TanStack Queryllä server-fn:stä. Fallback nykyisiin i18n-teksteihin jos tietokanta on tyhjä (ensimmäinen käyttöönotto).
+- **Kaksikielisyys**: admin-lomakkeessa kaksi välilehteä "Suomi" / "English" per kenttä. Toisen voi jättää tyhjäksi → fallback suomeen.
+- **RLS**: `site_content` ja `content_cards` — kaikille luku, vain adminille kirjoitus. Storage-bucket sama.
 
-- `/varaa` — sonuçlar (public loader, server fn ile saatavuus sorgusu)
-- `/varaa/vahvistus` — misafir formu (zod validasyon)
-- `/varaa/kiitos` — varausnumero + yazdırılabilir özet
-- `/admin/kirjaudu` — auth
-- `/_authenticated/admin` — dashboard + varaukset + paikat + sulkemiset
+## Laajuus & rajaus
 
-## Teknik detaylar (devs için)
+Ei tässä vaiheessa:
+- Sivujen lisääminen / poistaminen kokonaan (rakenne on kiinteä: Etusivu, Majoitus, Alue, Hinnasto, Saapuminen). Tämä on koodimuutos ja sekoittaisi navigaation ei-teknisen omistajan käsissä. Voidaan lisätä myöhemmin "vapaa sivu" -toiminto jos tarvitaan.
+- Rich text editor. Kentät ovat tavallista tekstiä + rivinvaihdot. Muotoilu on suunnittelun vastuulla, jotta sivu pysyy siistinä.
+- Versiointi / undo-historia.
 
-- Server functions: `searchAvailability`, `createBooking`, `getBooking`, admin-side `listBookings`, `updateBookingStatus`, `upsertPitch`, `createClosure`
-- Public read-only saatavuus için narrow `anon SELECT` policy `pitches`'te
-- `bookings` `anon INSERT` (rate limit + zod), `SELECT` yalnızca `has_role('admin')` veya varausnumero + email eşleşen public server fn üzerinden
-- Varausnumerosu: `JR-YYMMDD-XXXX` (6 rakamlı random)
-- Email onayı: şimdilik başlangıç transactional email scaffold (Resend), gerçek gönderim domain onayı sonrası
-- i18n: fi + en her yeni sayfa için
-
-## Faz 3 dışı (sonraki)
-- Kortilla ennakkomaksu (Stripe) — istenirse Faz 4
-- Guest hesabı / self-service iptal — Faz 4
-- Otomatik email onayı (domain onayı sonrası aktif)
-
-## Onay
-Bu planı onayla ki başlayabilirim; migration önce, sonra kullanıcı akışı sayfaları, en son admin paneli — her aşamada dur + özet.
+Toteutan kaiken tässä työvuorossa: migration → storage-bucket → server-fn:t → 5 admin-sivua → julkisten komponenttien kytkentä tietokantaan → i18n-tekstit adminille.

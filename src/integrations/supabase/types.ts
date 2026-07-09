@@ -145,6 +145,39 @@ export type Database = {
         }
         Relationships: []
       }
+      content_cards: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          section: Database["public"]["Enums"]["content_section"]
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          section: Database["public"]["Enums"]["content_section"]
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          section?: Database["public"]["Enums"]["content_section"]
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pitch_closures: {
         Row: {
           created_at: string
@@ -222,6 +255,24 @@ export type Database = {
         }
         Relationships: []
       }
+      site_content: {
+        Row: {
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: Json
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -281,6 +332,7 @@ export type Database = {
         | "checked_in"
         | "completed"
         | "cancelled"
+      content_section: "pitch" | "area" | "review"
       pitch_type: "tent" | "motorhome" | "caravan" | "cabin"
     }
     CompositeTypes: {
@@ -417,6 +469,7 @@ export const Constants = {
         "completed",
         "cancelled",
       ],
+      content_section: ["pitch", "area", "review"],
       pitch_type: ["tent", "motorhome", "caravan", "cabin"],
     },
   },

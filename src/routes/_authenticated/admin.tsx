@@ -26,8 +26,10 @@ const TABS: ReadonlyArray<{ to: string; label: string; exact?: boolean }> = [
   { to: "/admin/kalenteri", label: "nav.calendar" },
   { to: "/admin/paikat", label: "nav.pitches" },
   { to: "/admin/sulkemiset", label: "nav.closures" },
+  { to: "/admin/sisalto", label: "nav.content" },
   { to: "/admin/asetukset", label: "nav.settings" },
 ];
+
 
 function AdminLayout() {
   const { t } = useTranslation("admin");
