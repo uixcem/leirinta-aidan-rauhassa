@@ -3,36 +3,47 @@ import { Trees, Flame, MapPin } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { Eyebrow } from "@/components/ui/Eyebrow";
+import { pickLang, useLang, useSiteContent } from "@/hooks/useSiteContent";
 
-const ITEMS = [
-  { key: "1", Icon: Trees },
-  { key: "2", Icon: Flame },
-  { key: "3", Icon: MapPin },
-] as const;
+type LangText = { fi?: string; en?: string };
+type UspValue = {
+  eyebrow?: LangText;
+  items?: Array<{ title?: LangText; body?: LangText }>;
+};
+
+const ICONS = [Trees, Flame, MapPin] as const;
 
 export function SellingPoints() {
   const { t } = useTranslation("home");
+  const lang = useLang();
+  const { site } = useSiteContent();
+  const usp = (site.usp as UspValue | undefined) ?? {};
+  const items = usp.items ?? [];
+
+  const item = (i: number) => ({
+    title: pickLang(items[i]?.title, lang, t(`usp.${i + 1}.title`)),
+    body: pickLang(items[i]?.body, lang, t(`usp.${i + 1}.body`)),
+  });
+  const one = item(0), two = item(1), three = item(2);
+
   return (
     <Section tone="birch" ariaLabelledBy="usp-heading">
       <Container>
-        <Eyebrow>{t("usp.eyebrow")}</Eyebrow>
+        <Eyebrow>{pickLang(usp.eyebrow, lang, t("usp.eyebrow"))}</Eyebrow>
         <h2 id="usp-heading" className="mt-3 max-w-2xl">
-          {t("usp.1.title")} · {t("usp.2.title")} · {t("usp.3.title")}
+          {one.title} · {two.title} · {three.title}
         </h2>
         <ul className="mt-10 grid gap-8 sm:grid-cols-3 sm:gap-10">
-          {ITEMS.map(({ key, Icon }) => (
-            <li key={key} className="flex flex-col gap-3">
-              <Icon
-                aria-hidden
-                className="h-8 w-8 text-ochre-deep"
-                strokeWidth={1.5}
-              />
-              <h3 className="text-forest">{t(`usp.${key}.title`)}</h3>
-              <p className="prose-body text-[16px] text-ink/85">
-                {t(`usp.${key}.body`)}
-              </p>
-            </li>
-          ))}
+          {[one, two, three].map((it, i) => {
+            const Icon = ICONS[i];
+            return (
+              <li key={i} className="flex flex-col gap-3">
+                <Icon aria-hidden className="h-8 w-8 text-ochre-deep" strokeWidth={1.5} />
+                <h3 className="text-forest">{it.title}</h3>
+                <p className="prose-body text-[16px] text-ink/85">{it.body}</p>
+              </li>
+            );
+          })}
         </ul>
       </Container>
     </Section>
