@@ -131,7 +131,7 @@ function CardEditor({
   const dirty = JSON.stringify(local) !== JSON.stringify(card);
 
   const patchData = (k: keyof CardData, v: LangText) =>
-    setLocal({ ...local, data: { ...(local.data as CardData), [k]: v } as Record<string, unknown> });
+    setLocal({ ...local, data: { ...(local.data as CardData), [k]: v } as unknown as ContentCard["data"] });
 
   return (
     <div className="rounded-xl border border-forest/15 bg-white p-5 shadow-[var(--shadow-soft)]">
