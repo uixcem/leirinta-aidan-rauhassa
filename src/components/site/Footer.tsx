@@ -1,15 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Container } from "@/components/ui/Container";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { pickLang, useLang, useSiteContent } from "@/hooks/useSiteContent";
 
 export function Footer() {
   const { t } = useTranslation("common");
+  const lang = useLang();
+  const { site } = useSiteContent();
+  const brandName = pickLang(
+    (site.brand as { name?: { fi?: string; en?: string } } | undefined)?.name,
+    lang,
+    "Järvenranta",
+  );
   const year = new Date().getFullYear();
   return (
     <footer className="border-t border-forest/10 bg-birch-deep text-ink">
       <Container className="grid gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <p className="font-display text-lg font-semibold text-forest">Järvenranta</p>
+          <p className="font-display text-lg font-semibold text-forest">{brandName}</p>
           <p className="mt-2 text-sm text-stone">{t("brand.tagline")}</p>
         </div>
         <div>
